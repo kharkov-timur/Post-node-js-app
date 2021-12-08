@@ -12,37 +12,37 @@ const createPath = require('./helpers/create-path');
 const errorMsg = chalk.bgKeyword('white').redBright;
 const successMsg = chalk.bgKeyword('green').white;
 
-const app = express();
+const server = express();
 
-app.set('view engine', 'ejs');
+server.set('view engine', 'ejs');
 
 mongoose
   .connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((res) => console.log(successMsg('Connected to DB')))
   .catch((error) => console.log(errorMsg(error)));
 
-app.listen(process.env.PORT, (error) => {
+server.listen(process.env.PORT, (error) => {
   error ? console.log(errorMsg(error)) : console.log(successMsg(`listening port ${process.env.PORT}`));
 });
 
-app.use(express.urlencoded({ extended: false }));
+server.use(express.urlencoded({ extended: false }));
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+server.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
-app.use(express.static('styles'));
+server.use(express.static('styles'));
 
-app.use(methodOverride('_method'));
+server.use(methodOverride('_method'));
 
-app.get('/', (req, res) => {
+server.get('/', (req, res) => {
   const title = 'Home';
   res.render(createPath('index'), { title });
 });
 
-app.use(postRoutes);
-app.use(contactRoutes);
-app.use(postApiRoutes);
+server.use(postRoutes);
+server.use(contactRoutes);
+server.use(postApiRoutes);
 
-app.use((req, res) => {
+server.use((req, res) => {
   const title = 'Error Page';
   res
     .status(404)
