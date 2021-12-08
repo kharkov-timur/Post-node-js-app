@@ -1,41 +1,36 @@
-import * as dotenv from 'dotenv';
-import express from 'express';
-import morgan from 'morgan';
-import mongoose from 'mongoose';
-import methodOverride from 'method-override';
+const express = require('express');
+const chalk = require('chalk');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+require('dotenv').config();
+const methodOverride = require('method-override');
+const postRoutes = require('./routes/post-routes');
+const postApiRoutes = require('./routes/api-post-routes');
+const contactRoutes = require('./routes/contact-routes');
+const createPath = require('./helpers/create-path');
 
-import postRoutes from './routes/post-routes.js';
-import contactRoutes from './routes/contact-routes.js';
-import apiPostRoutes from './routes/api-post-routes.js';
-import createPath from './helpers/create-path.js';
-import { errorMsg, successMsg } from './helpers/handle-error.js';
-
-dotenv.config();
+const errorMsg = chalk.bgKeyword('white').redBright;
+const successMsg = chalk.bgKeyword('green').white;
 
 const app = express();
 
 app.set('view engine', 'ejs');
 
-const PORT = process.env.PORT;
-const db = process.env.MONGO_URL;
-
 mongoose
-  .connect(db, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then((res) => successMsg('Connected to DB'))
-  .catch((error) => errorMsg(error));
+  .connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((res) => console.log(successMsg('Connected to DB')))
+  .catch((error) => console.log(errorMsg(error)));
 
-app.listen(PORT, (error) => {
-  error ? errorMsg(error) : successMsg(`Server started ${PORT}`);
+app.listen(process.env.PORT, (error) => {
+  error ? console.log(errorMsg(error)) : console.log(successMsg(`listening port ${process.env.PORT}`));
 });
 
-app.use(
-  morgan(':method :url :status :res[content-length] - :response-time ms'),
-);
 app.use(express.urlencoded({ extended: false }));
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+
 app.use(express.static('styles'));
+
 app.use(methodOverride('_method'));
 
 app.get('/', (req, res) => {
@@ -45,9 +40,11 @@ app.get('/', (req, res) => {
 
 app.use(postRoutes);
 app.use(contactRoutes);
-app.use(apiPostRoutes);
+app.use(postApiRoutes);
 
 app.use((req, res) => {
-  const title = 'Error page';
-  res.status(404).render(createPath('error'), { title });
+  const title = 'Error Page';
+  res
+    .status(404)
+    .render(createPath('error'), { title });
 });

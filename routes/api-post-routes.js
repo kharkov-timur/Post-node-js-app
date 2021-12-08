@@ -1,27 +1,23 @@
-import express from 'express';
-const routes = express.Router();
-
-import {
+const express = require('express');
+const {
   getPosts,
-  addNewPost,
+  addPost,
   getPost,
   deletePost,
-  updatePost,
-} from '../controllers/api-post-controller.js';
+  editPost,
+} = require('../controllers/api-post-controller');
+
+const router = express.Router();
 
 // Get All Posts
-routes.get('/api/posts', getPosts);
-
+router.get('/api/posts', getPosts);
 // Add New Post
-routes.post('/api/post', addNewPost);
-
+router.post('/api/post/', addPost);
 // Get Post by ID
-routes.get('/api/post/:id', getPost);
-
+router.get('/api/post/:id', getPost);
 // Delete Post by ID
-routes.delete('/api/post/:id', deletePost);
-
+router.delete('/api/post/:id', deletePost);
 // Update Post by ID
-routes.put('/api/post/:id', updatePost);
+router.put('/api/post/:id', editPost);
 
-export default routes;
+module.exports = router;

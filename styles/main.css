@@ -1,7 +1,7 @@
 body {
   padding-top: 80px;
   min-height: calc(100vh - 90px);
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 20px;
   background: linear-gradient(to bottom, #00d2ff, #928dab);
   color: #fff;
@@ -131,7 +131,7 @@ textarea {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 20px;
   background: linear-gradient(to bottom, #00d2ff, #928dab);
   color: #fff;

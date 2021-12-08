@@ -1,46 +1,54 @@
-import Post from '../models/post.js';
-import { unexpectedError } from '../helpers/handle-error.js';
+const Post = require('../models/post');
 
-const getPost = (req, res) => {
-  Post.findById(req.params.id)
-    .then((post) => res.status(200).json(post))
-    .catch((err) => unexpectedError(res, err));
-};
+const handleError = (res, error) => {
+  res.status(500).send(error.message);
+}
 
 const getPosts = (req, res) => {
-  Post.find()
+  Post
+    .find()
     .sort({ createdAt: -1 })
     .then((posts) => res.status(200).json(posts))
-    .catch((err) => unexpectedError(res, err));
-};
+    .catch((error) => handleError(res, error));
+}
 
-const deletePost = (req, res) => {
-  Post.findByIdAndDelete(req.params.id)
-    .then(() => res.status(200).json(req.params.id))
-    .catch((err) => unexpectedError(res, err));
-};
-
-const updatePost = (req, res) => {
+const addPost = (req, res) => {
   const { title, author, text } = req.body;
-  const { id } = req.params;
-  Post.findByIdAndUpdate(id, { title, author, text }, { new: true })
-    .then((post) => res.status(200).json(post))
-    .catch((err) => unexpectedError(res, err));
-};
-
-const addNewPost = (req, res) => {
-  const { title, author, text } = req.body;
-  const post = new Post({
-    id: new Date(),
-    title,
-    text,
-    author,
-  });
-
+  const post = new Post({ title, author, text });
   post
     .save()
     .then((post) => res.status(200).json(post))
-    .catch((err) => unexpectedError(res, err));
-};
+    .catch((error) => handleError(res, error));
+}
 
-export { getPost, getPosts, deletePost, updatePost, addNewPost };
+const getPost = (req, res) => {
+  Post
+    .findById(req.params.id)
+    .then((post) => res.status(200).json(post))
+    .catch((error) => handleError(res, error));
+}
+
+const deletePost = (req, res) => {
+  const { id } = req.params;
+  Post
+    .findByIdAndDelete(id)
+    .then((post) => res.status(200).json(id))
+    .catch((error) => handleError(res, error));
+}
+
+const editPost = (req, res) => {
+  const { title, author, text } = req.body;
+  const { id } = req.params;
+  Post
+    .findByIdAndUpdate(id, { title, author, text }, { new: true })
+    .then((post) => res.json(post))
+    .catch((error) => handleError(res, error));
+}
+
+module.exports = {
+  getPosts,
+  addPost,
+  getPost,
+  deletePost,
+  editPost,
+};
