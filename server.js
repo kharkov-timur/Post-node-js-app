@@ -6,6 +6,7 @@ require('dotenv').config();
 const methodOverride = require('method-override');
 const postRoutes = require('./routes/post-routes');
 const postApiRoutes = require('./routes/api-post-routes');
+const pizzaApiRoutes = require('./routes/api-pizza-routes');
 const contactRoutes = require('./routes/contact-routes');
 const createPath = require('./helpers/create-path');
 
@@ -41,6 +42,7 @@ server.get('/', (req, res) => {
 server.use(postRoutes);
 server.use(contactRoutes);
 server.use(postApiRoutes);
+server.use(pizzaApiRoutes);
 
 server.use((req, res) => {
   const title = 'Error Page';
