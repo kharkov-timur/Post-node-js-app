@@ -1,3 +1,11 @@
 # Post node.js app
 
-https://posts-node-ls-app.herokuapp.com/
+Link to visit https://posts-node-ls-app.herokuapp.com/
+
+Stack
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- Ejs for templates
+- Morgan
