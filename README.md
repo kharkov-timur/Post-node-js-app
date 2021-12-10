@@ -2,7 +2,7 @@
 
 Link to visit https://posts-node-ls-app.herokuapp.com/
 
-Stack
+## Stack
 - Node.js
 - Express
 - MongoDB
